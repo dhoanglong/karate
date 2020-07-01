@@ -15,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 public class CucumberTest {
     @Test
     public void testAll() {
-//        return Karate.run().relativeTo(getClass());
         Results results = Runner.path("classpath:examples/cats/").parallel(5);
         generateReport(results.getReportDir());
         assertTrue(results.getErrorMessages(), results.getFailCount() == 0);

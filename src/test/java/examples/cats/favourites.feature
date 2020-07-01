@@ -1,8 +1,8 @@
 Feature: sample favourites test script
-
   Background:
     * url baseURL
     * configure headers = { 'x-api-key': #(apiKey) }
+    * def data = read('data.json')
 
   Scenario Outline: save an image as a favourite
     Given path 'favourites'
@@ -11,7 +11,6 @@ Feature: sample favourites test script
     Then status 200
 
     Examples:
-      | image_id | sub_id |
-      | '7ng'    |   "1"  |
-      | '494'    |   "2"  |
-      | '7ci'    |   "3"  |
+      |data|
+
+
