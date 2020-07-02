@@ -1,0 +1,9 @@
+{
+  "id": "#string",
+  "name": "#string",
+  "vendorName": "#string",
+  "type": "#string",
+  "subtype": "##null #string",
+  "description": "##null #string",
+  "actions": "#array"
+}

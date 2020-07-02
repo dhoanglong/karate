@@ -1,0 +1,4 @@
+description,name,type,vendorName
+clock,clock,philips_account,Any
+fan,fan,jawbone_account,Any
+bulb,bulb,mihome_account,Any

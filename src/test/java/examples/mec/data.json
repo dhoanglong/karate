@@ -1,0 +1,20 @@
+[
+  {
+    "description": "clock",
+    "name": "clock",
+    "type": "philips_account",
+    "vendorName": "Any"
+  },
+  {
+    "description": "fan",
+    "name": "fan",
+    "type": "jawbone_account",
+    "vendorName": "Any"
+  },
+  {
+    "description": "bulb",
+    "name": "bulb",
+    "type": "mihome_account",
+    "vendorName": "Any"
+  }
+]
