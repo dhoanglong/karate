@@ -30,5 +30,5 @@ Feature: sample cats test script
     Given path 'devices', deviceID
     And param permanent = 'false'
     When method delete
-    Then status 200
+    Then status 400
 
