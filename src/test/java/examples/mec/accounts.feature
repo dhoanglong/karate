@@ -6,7 +6,7 @@ Feature: sample cats test script
 
   @getID
   Scenario: Get the accounts list
-    Given path 'devices', 'accounts'
+    Given path 'accounts'
     When method get
     Then status 200
     And match response contains read('accounts.json')
@@ -14,7 +14,7 @@ Feature: sample cats test script
   Scenario Outline: Add an account
     * def body = { description: '<description>', name: '<name>', type: '<type>', vendorName: '<vendorName>' }
 
-    Given path 'devices', 'accounts'
+    Given path 'accounts'
     And request body
     When method post
     Then status 201
@@ -24,11 +24,10 @@ Feature: sample cats test script
 
   Scenario: Delete an account
     * def result = call read('accounts.feature@getID')
-    * def deviceList = result.response
-    * def deviceID = deviceList[0].id
+    * def accountList = result.response
+    * def accountID = accountList[0].id
 
-    Given path 'devices', deviceID
-    And param permanent = 'false'
+    Given path accountID
     When method delete
     Then status 200
 

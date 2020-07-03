@@ -8,7 +8,7 @@ function fn() {
   var config = {
 //    baseURL: 'https://api.thecatapi.com/v1/',
 //    apiKey: '3e5c20e0-2875-4551-b983-d25c008d626c'
-    baseURL: 'http://localhost:' + port + '/api'
+    baseURL: 'http://localhost:' + port + '/api/devices'
   };
 //  if (env == 'stage') {
 //    // over-ride only those that need to be
