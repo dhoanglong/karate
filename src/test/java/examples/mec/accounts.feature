@@ -1,4 +1,4 @@
-Feature: sample cats test script
+Feature: sample accounts test script
 
   Background:
     * url baseURL
