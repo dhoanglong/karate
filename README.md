@@ -25,9 +25,7 @@ And you don't need to create additional Java classes for any of the payloads tha
 <tr>
   <th>Run</th>
   <td>
-    | <a href="#command-line">Command Line</a>
-    | <a href="#ide-support">IDE Support</a>    
-    | <a href="#tags">Tags / Grouping</a>
+      <a href="#command-line">Command Line</a>
     | <a href="#parallel-execution">Parallel Execution</a>
   </td>
 </tr>
@@ -36,15 +34,12 @@ And you don't need to create additional Java classes for any of the payloads tha
   <td>
       <a href="#configuration">Configuration</a> 
     | <a href="#test-reports">Reports</a>
-    | <a href="#junit-html-report">JUnit HTML Report</a>
   </td>
 </tr>
 <tr>
   <th>Types</th>
   <td>
-      <a href="#json">JSON</a> 
-    | <a href="#xml">XML</a>
-    | <a href="#javascript-functions">JavaScript Functions</a>
+      <a href="#json">JSON</a>
     | <a href="#reading-files">Reading Files</a>
   </td>
 </tr>
@@ -54,7 +49,6 @@ And you don't need to create additional Java classes for any of the payloads tha
       <a href="#def"><code>def</code></a>
     | <a href="#text"><code>text</code></a>
     | <a href="#table"><code>table</code></a>
-    | <a href="#csv"><code>csv</code></a>
   </td>
 </tr>
 <tr>
@@ -62,7 +56,6 @@ And you don't need to create additional Java classes for any of the payloads tha
   <td>
       <a href="#assert"><code>assert</code></a>
     | <a href="#print"><code>print</code></a>
-    | <a href="#configure"><code>configure</code></a>
     | <a href="#call"><code>call</code></a> 
     | <a href="#reading-files"><code>read()</code></a>
   </td>
@@ -244,6 +237,100 @@ function fn() {
   return config;
 }
 ```
+
+# Setting and Using Variables
+## `def`
+### Set a named variable
+```cucumber
+# assigning a string value:
+* def accountID = accountList[0].id
+
+# using a variable
+Then print accountID
+```
+Note that `def` will over-write any variable that was using the same name earlier.
+
+## `assert`
+### Assert if an expression evaluates to `true`
+Once defined, you can refer to a variable by name. Expressions are evaluated using the embedded JavaScript engine. The assert keyword can be used to assert that an expression returns a boolean value.
+
+```cucumber
+Given def color = 'red '
+And def num = 5
+Then assert color + num == 'red 5'
+```
+Everything to the right of the `assert` keyword will be evaluated as a single expression.
+
+## `print`
+### Log to the console
+You can use `print` to log variables to the console in the middle of a script. For convenience, you can have multiple expressions separated by commas, so this is the recommended pattern:
+
+```cucumber
+* print 'the value of a is:', a
+```
+
+Similar to [`assert`](#assert), the expressions on the right-hand-side of a `print` have to be valid JavaScript.
+
+If you use commas (instead of concatenating strings using `+`), Karate will 'pretty-print' variables
+
+```cucumber
+* def myJson = { foo: 'bar', baz: [1, 2, 3] }
+* print 'the value of myJson is:', myJson
+```
+Which results in the following output:
+```
+20:29:11.290 [main] INFO  com.intuit.karate - [print] the value of myJson is: {
+  "foo": "bar",
+  "baz": [
+    1,
+    2,
+    3
+  ]
+}
+```
+
+# 'Native' data types
+Native data types mean that you can insert them into a script without having to worry about enclosing them in strings and then having to 'escape' double-quotes all over the place. They seamlessly fit 'in-line' within your test script.
+
+## JSON
+Note that the parser is 'lenient' so that you don't have to enclose all keys in double-quotes.
+```cucumber
+* def cat = { name: 'Billie', scores: [2, 5] }
+* assert cat.scores[1] == 5
+```
+
+> Some characters such as the hyphen `-` are not permitted in 'lenient' JSON keys (because they are interpreted by the JS engine as a 'minus sign'). In such cases, you *have* to use string quotes: `{ 'Content-Type': 'application/json' }`
+
+When asserting for expected values in JSON or XML, always prefer using [`match`](#match) instead of [`assert`](#assert). Match failure messages are much more descriptive and useful, and you get the power of [embedded expressions](#embedded-expressions) and [fuzzy matching](#fuzzy-matching).
+```cucumber
+* def cats = [{ name: 'Billie' }, { name: 'Bob' }]
+* match cats[1] == { name: 'Bob' }
+```
+
+Karate's native support for JSON means that you can assign parts of a JSON instance into another variable, which is useful when dealing with complex [`response`](#response) payloads.
+```cucumber
+* def first = cats[0]
+* match first == { name: 'Billie' }
+```
+
+## `table`
+### A simple way to create JSON Arrays
+Now that we have seen how JSON is a 'native' data type that Karate understands, there is a very nice way to create JSON using Cucumber's support for expressing [data-tables](http://www.thinkcode.se/blog/2014/06/30/cucumber-data-tables).
+
+```cucumber
+* table devices
+    | description | name  |       type      | vendorName |
+    |    clock    | clock | philips_account |    Any     |
+    |    fan      | fan   | jawbone_account |    Any     |
+    |    bulb     | bulb  | mihome_account  |    Any     |
+
+* match devices == [
+                    { description: 'clock', name: 'clock', type: 'philips_account', vendorName: 'Any' }, 
+                    { description: 'fan', name: 'fan', type: 'jawbone_account', vendorName: 'Any' }, 
+                    { description: 'bulb', name: 'bulb', type: 'mihome_account', vendorName: 'Any' } 
+                   ]
+```
+The [`match`](#match) keyword is explained later, but it should be clear right away how convenient the `table` keyword is. 
 
 ## Reading Files
 Karate makes re-use of payload data, utility-functions and even other test-scripts as easy as possible. Teams typically define complicated JSON (or XML) payloads in a file and then re-use this in multiple scripts. And such re-use makes it easier to re-factor tests when needed, which is great for maintainability.
@@ -624,7 +711,7 @@ You can feed an `Examples` table from a JSON array, which is great for those sit
     And request body
     When method post
     Then status 201
-
+~~~~
     Examples:
       |read('data.csv')|
 ```
