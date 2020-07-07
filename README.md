@@ -47,7 +47,6 @@ And you don't need to create additional Java classes for any of the payloads tha
   <th>Variables</th>
   <td>
       <a href="#def"><code>def</code></a>
-    | <a href="#text"><code>text</code></a>
     | <a href="#table"><code>table</code></a>
   </td>
 </tr>
@@ -711,7 +710,7 @@ You can feed an `Examples` table from a JSON array, which is great for those sit
     And request body
     When method post
     Then status 201
-~~~~
+
     Examples:
       |read('data.csv')|
 ```
