@@ -1,5 +1,3 @@
-package examples;
-
 import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
 import net.masterthought.cucumber.Configuration;
@@ -15,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AccountsTest {
     @Test
     public void testAccount() {
-        Results results = Runner.path("classpath:examples/mec/").parallel(5);
+        Results results = Runner.path("classpath:mec/").parallel(5);
         generateReport(results.getReportDir());
         assertEquals(0, results.getFailCount(), results.getErrorMessages());
     }

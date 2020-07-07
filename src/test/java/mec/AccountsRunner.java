@@ -1,4 +1,4 @@
-package examples.mec;
+package mec;
 
 import com.intuit.karate.junit5.Karate;
 
