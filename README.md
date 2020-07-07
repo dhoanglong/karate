@@ -688,7 +688,7 @@ Feature: sample accounts test script
     Then status 201
 
     Examples:
-    | description | name  |       type      | venderName |
+    | description | name  |       type      | vendorName |
     |    clock    | clock | philips_account |    Any     |
     |    fan      | fan   | jawbone_account |    Any     |
     |    bulb     | bulb  | mihome_account  |    Any     |
